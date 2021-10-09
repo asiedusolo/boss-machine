@@ -39,6 +39,20 @@ minionsRouter.post('/', (req, res, next) => {
     }
 })
 
-
+minionsRouter.put('/:minionId', (req, res, next) => {
+    const minionId = req.params.minionId
+    const minionToUpdate = getFromDatabaseById('minions', minionId);
+    if (minionToUpdate) {
+        // updateInstanceInDatabase('minions', minionToUpdate);
+        req.body.id = minionToUpdate.id
+        const updatedMinion = updateInstanceInDatabase('minions', req.body);
+        res.send({
+            minion: updatedMinion});
+      } else {
+        res.status(404).send();
+      }
+          
+    
+})
 
 module.exports = minionsRouter
