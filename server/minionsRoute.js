@@ -1,8 +1,12 @@
 const express = require('express');
 const minionsRouter = express.Router()
+const {getAllFromDatabase} = require('./db')
 
 minionsRouter.get('/', (req, res, next) => {
-    res.send('<h1>Hello future millionaires</h1>')
+    const minionsArray = getAllFromDatabase('minions')
+    res.send({
+        minions: minionsArray
+    })
 })
 
 
