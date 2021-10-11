@@ -1,6 +1,6 @@
 const express = require('express');
 const ideasRouter = express.Router()
-const {getAllFromDatabase, getFromDatabaseById, addToDatabase, updateInstanceInDatabase} = require('./db.js')
+const {getAllFromDatabase, getFromDatabaseById, addToDatabase, updateInstanceInDatabase, deleteFromDatabasebyId} = require('./db.js')
 
 ideasRouter.get('/', (req, res, next) => {
     const ideasArray = getAllFromDatabase('ideas')
@@ -54,6 +54,16 @@ ideasRouter.put('/:ideaId', (req, res, next) => {
       }
           
     
+})
+
+ideasRouter.delete('/:ideaId', (req, res, next) => {
+    const ideaId = req.params.ideaId
+    const ideaToDelete = deleteFromDatabasebyId('ideas', ideaId)
+    if(ideaToDelete){
+        res.status(204).send()
+    }else{
+        res.status(404).send()
+    }
 })
 
 
