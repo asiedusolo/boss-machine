@@ -1,7 +1,7 @@
 const express = require('express');
 const meetingsRouter = express.Router()
 
-const {getAllFromDatabase, addToDatabase} = require('./db')
+const {getAllFromDatabase, addToDatabase, deleteAllFromDatabase} = require('./db')
 
 meetingsRouter.get('/', (req, res, next) => {
     const meetingsArray = getAllFromDatabase('meetings')
@@ -27,6 +27,15 @@ meetingsRouter.post('/', (req, res, next) => {
             meeting: newMeeting
         })
     }
+})
+
+meetingsRouter.delete('/', (req, res, next) => {
+    const meetingsArray = deleteAllFromDatabase('meetings')
+    if(meetingsArray){
+        res.send({
+            meetings: meetingsArray
+        })
+    }   
 })
 
 
