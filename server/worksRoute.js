@@ -1,5 +1,5 @@
 const express = require('express')
-const { getFromDatabaseById, getAllFromDatabase, addToDatabase, updateInstanceInDatabase } = require('./db')
+const { getFromDatabaseById, getAllFromDatabase, addToDatabase, updateInstanceInDatabase, deleteFromDatabasebyId } = require('./db')
 const worksRouter = express.Router({mergeParams: true})
 
 worksRouter.get('/', (req, res, next) => {
@@ -61,6 +61,18 @@ worksRouter.put('/:workId', (req, res, next) => {
         }
         
     }
+})
+
+worksRouter.delete('/:workId', (req, res, next) => {
+    const workId = req.params.workId
+    const workToDelete = deleteFromDatabasebyId('work', workId)
+    if(workToDelete){
+        res.status(204).send()
+    }else{
+        res.status(403).send()
+    }
+    
+        
 })
 
 
