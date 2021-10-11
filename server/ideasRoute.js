@@ -16,7 +16,7 @@ ideasRouter.get('/:ideaId', (req, res, next) => {
         res.send({
             idea: idea
         })
-    }else{
+    } else{
         res.status(404).send()
     }
 })
