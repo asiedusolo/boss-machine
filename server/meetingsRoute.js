@@ -5,17 +5,13 @@ const {getAllFromDatabase, addToDatabase, deleteAllFromDatabase, createMeeting} 
 
 meetingsRouter.get('/', (req, res, next) => {
     const meetingsArray = getAllFromDatabase('meetings')
-    res.send({
-        meetings: meetingsArray
-    })
+    res.send(meetingsArray)
 })
 
 meetingsRouter.post('/', (req, res, next) => {
     const newMeeting = addToDatabase('meetings', createMeeting())
     if(newMeeting){
-        res.status(201).send({
-            meeting: newMeeting
-        })
+        res.status(201).send(newMeeting)
     }else{
         res.status(400).send()
     }
@@ -24,9 +20,7 @@ meetingsRouter.post('/', (req, res, next) => {
 meetingsRouter.delete('/', (req, res, next) => {
     const meetingsArray = deleteAllFromDatabase('meetings')
     if(meetingsArray){
-        res.send({
-            meetings: meetingsArray
-        })
+        res.status(204).send()
     }   
 })
 

@@ -1,11 +1,12 @@
 const checkMillionDollarIdea = (req, res, next) => {
-    const weeklyRevenue = Number(req.body.weeklyRevenue)
-    const numWeeks = Number(req.body.numWeeks)
-    const ideasWorth = weeklyRevenue * numWeeks
-    
-    req.atLeastOneMillion = ideasWorth >= 1000000
-    next()
-};
+    const { numWeeks, weeklyRevenue } = req.body;
+    const totalMoney = Number(numWeeks) * Number(weeklyRevenue);
+    if (!numWeeks || !weeklyRevenue || isNaN(totalMoney) || totalMoney < 1000000) {
+      res.status(400).send();
+    } else {
+      next();
+    }
+  }
 
 // Leave this exports assignment so that the function can be used elsewhere
 module.exports = checkMillionDollarIdea;

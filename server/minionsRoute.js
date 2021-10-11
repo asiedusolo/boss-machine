@@ -8,39 +8,37 @@ minionsRouter.use('/:minionId/work', worksRouter)
 
 minionsRouter.get('/', (req, res, next) => {
     const minionsArray = getAllFromDatabase('minions')
-    res.send({
-        minions: minionsArray
-    })
+    res.send(minionsArray)
 })
 
 minionsRouter.get('/:minionId', (req, res, next) => {
     const minionId = req.params.minionId
     const minion = getFromDatabaseById('minions', minionId)
     if(minion){
-        res.send({
-            minion: minion
-        })
+        res.send(minion)
     }else{
         res.status(404).send()
     }
 })
 
 minionsRouter.post('/', (req, res, next) => {
-    console.log('Got Body: ', req.body)
-    const name = req.body.name
-    const title = req.body.title
-    const salary = req.body.salary
-    const weaknesses = req.body.weaknesses
-    if(name === "" || title === "" || weaknesses === "" || salary === ""){
-        res.status(400).send()
-    }
-    else{
-        req.body.salary = Number(salary)
+    // const name = req.body.name
+    // const title = req.body.title
+    // const salary = req.body.salary
+    // const weaknesses = req.body.weaknesses
+    // if(salary === ""){
+    //     res.status(400).send()
+    // }
+    // else{
+        req.body.salary = Number(req.body.salary)
         const newMinion = addToDatabase('minions', req.body)
-        res.status(201).send({
-            minion: newMinion
-        })
-    }
+        if(newMinion){
+
+            res.status(201).send(newMinion)       
+        }else{
+            res.status(400).send()
+        }
+    // }
 })
 
 minionsRouter.put('/:minionId', (req, res, next) => {
@@ -50,8 +48,7 @@ minionsRouter.put('/:minionId', (req, res, next) => {
         // updateInstanceInDatabase('minions', minionToUpdate);
         req.body.id = minionToUpdate.id
         const updatedMinion = updateInstanceInDatabase('minions', req.body);
-        res.send({
-            minion: updatedMinion});
+        res.json(updatedMinion);
       } else {
         res.status(404).send();
       }
