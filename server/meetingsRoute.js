@@ -1,8 +1,13 @@
 const express = require('express');
 const meetingsRouter = express.Router()
 
+const {getAllFromDatabase} = require('./db')
+
 meetingsRouter.get('/', (req, res, next) => {
-    res.send('<h1>Hello future millionaires let schedule and discuss billion dollar ideas</h1>')
+    const meetingsArray = getAllFromDatabase('meetings')
+    res.send({
+        meetings: meetingsArray
+    })
 })
 
 
