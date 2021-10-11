@@ -1,5 +1,5 @@
 const express = require('express')
-const { getFromDatabaseById, getAllFromDatabase, addToDatabase } = require('./db')
+const { getFromDatabaseById, getAllFromDatabase, addToDatabase, updateInstanceInDatabase } = require('./db')
 const worksRouter = express.Router({mergeParams: true})
 
 worksRouter.get('/', (req, res, next) => {
@@ -35,6 +35,31 @@ worksRouter.post('/', (req, res, next) => {
         }else{
             res.status(404).send()
         }
+    }
+})
+
+worksRouter.put('/:workId', (req, res, next) => {
+    const workId = req.params.workId
+    const workToUpdate = getFromDatabaseById('work', workId)
+    // console.log(workToUpdate)
+    const title = req.body.title
+    const description = req.body.description
+    const hours = req.body.hours
+    if(title === "" || description === "" || hours === ""){
+        res.status(404).send()
+    }else{
+        req.body.hours = Number(req.body.hours)
+        req.body.minionId = req.params.minionId
+        if(workToUpdate){
+            req.body.id = workToUpdate.id
+            const updatedWork = updateInstanceInDatabase('work', req.body)
+            if(updatedWork){
+                res.send({
+                    work: updatedWork
+                })
+            }
+        }
+        
     }
 })
 
