@@ -1,6 +1,9 @@
 const express = require('express');
+const checkMillionDollarIdea = require('./checkMillionDollarIdea.js');
 const ideasRouter = express.Router()
 const {getAllFromDatabase, getFromDatabaseById, addToDatabase, updateInstanceInDatabase, deleteFromDatabasebyId} = require('./db.js')
+
+ideasRouter.use(['/', '/:ideaId'], checkMillionDollarIdea)
 
 ideasRouter.get('/', (req, res, next) => {
     const ideasArray = getAllFromDatabase('ideas')
@@ -33,17 +36,22 @@ ideasRouter.post('/', (req, res, next) => {
     else{
         req.body.weeklyRevenue = Number(weeklyRevenue)
         req.body.numWeeks = Number(numWeeks)
-        const newIdea = addToDatabase('ideas', req.body)
-        res.status(201).send({
-            idea: newIdea
-        })
+        if(req.atLeastOneMillion){
+            const newIdea = addToDatabase('ideas', req.body)
+            res.status(201).send({
+                idea: newIdea
+            })
+        }else{
+            res.status(400).send()
+        }
+        
     }
 })
 
 ideasRouter.put('/:ideaId', (req, res, next) => {
     const ideaId = req.params.ideaId
     const ideaToUpdate = getFromDatabaseById('ideas', ideaId);
-    if (ideaToUpdate) {
+    if (ideaToUpdate && req.atLeastOneMillion) {
         req.body.id = ideaToUpdate.id
         const updatedIdea = updateInstanceInDatabase('ideas', req.body);
         res.send({
